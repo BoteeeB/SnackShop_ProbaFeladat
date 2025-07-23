@@ -3,6 +3,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import api from "../services/api";
 import { gsap } from "gsap";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -20,6 +21,10 @@ export default function AdminPanel() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const formFieldsRef = useRef<(HTMLInputElement | null)[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
+  const ordersButtonRef = useRef<HTMLButtonElement>(null);
+
+  const navigate = useNavigate();
 
   const fetchProducts = () =>
     api.get<Product[]>("/api/products").then((res) => setProducts(res.data));
@@ -33,6 +38,8 @@ export default function AdminPanel() {
     gsap.set(headingRef.current, { opacity: 0, y: -20 });
     gsap.set(formFieldsRef.current, { opacity: 0, x: -30 });
     gsap.set(productRefs.current, { opacity: 0, y: 20 });
+    gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
+    gsap.set(ordersButtonRef.current, { opacity: 0, scale: 0.8 });
 
     requestAnimationFrame(() => {
       gsap.to(containerRef.current, {
@@ -66,6 +73,22 @@ export default function AdminPanel() {
         stagger: 0.1,
         delay: 0.8,
         ease: "power2.out",
+      });
+
+      gsap.to(submitButtonRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+        delay: 1,
+        ease: "back.out(1.7)",
+      });
+
+      gsap.to(ordersButtonRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+        delay: 1.4,
+        ease: "back.out(1.7)",
       });
     });
   }, [products.length]);
@@ -121,8 +144,8 @@ export default function AdminPanel() {
                 setForm({ ...form, name: e.target.value })
               }
               ref={(el) => {
-  formFieldsRef.current[0] = el;
-}}
+                formFieldsRef.current[0] = el;
+              }}
               className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-lg"
             />
             <input
@@ -133,8 +156,8 @@ export default function AdminPanel() {
                 setForm({ ...form, price: parseInt(e.target.value) || 0 })
               }
               ref={(el) => {
-  formFieldsRef.current[1] = el;
-}}
+                formFieldsRef.current[1] = el;
+              }}
               className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-lg"
             />
             <input
@@ -145,12 +168,14 @@ export default function AdminPanel() {
                 setForm({ ...form, stock: parseInt(e.target.value) || 0 })
               }
               ref={(el) => {
-  formFieldsRef.current[2] = el;
-}}
+                formFieldsRef.current[2] = el;
+              }}
               className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-lg"
             />
           </div>
+
           <button
+            ref={submitButtonRef}
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition"
           >
@@ -163,8 +188,8 @@ export default function AdminPanel() {
             <div
               key={p.id}
               ref={(el) => {
-  productRefs.current[index] = el;
-}}
+                productRefs.current[index] = el;
+              }}
               className="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow transition hover:shadow-md"
             >
               <span className="text-lg font-medium text-gray-800">
@@ -188,6 +213,14 @@ export default function AdminPanel() {
             </div>
           ))}
         </div>
+
+        <button
+          ref={ordersButtonRef}
+          onClick={() => navigate("/orders")}
+          className="mt-8 w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-indigo-700 transition"
+        >
+          Rendelések megtekintése
+        </button>
       </div>
     </div>
   );
