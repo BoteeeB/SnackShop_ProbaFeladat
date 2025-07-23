@@ -15,6 +15,7 @@ interface Product {
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [message, setMessage] = useState("");
   const { addToCart } = useCart();
 
   const { user, logout } = useAuth();
@@ -22,9 +23,15 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  const fetchProducts = async () => {
+    const res = await api.get<Product[]>("/api/products");
+    setProducts(res.data);
+  };
 
   useEffect(() => {
-    api.get<Product[]>("/api/products").then((res) => setProducts(res.data));
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -61,6 +68,29 @@ export default function Home() {
     }
   }, [products]);
 
+  useEffect(() => {
+    if (!message || !messageRef.current) return;
+
+    const el = messageRef.current;
+
+    gsap.fromTo(
+      el,
+      { opacity: 0, y: -20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    );
+
+    const timeout = setTimeout(() => {
+      gsap.to(el, {
+        opacity: 0,
+        y: -20,
+        duration: 0.5,
+        ease: "power2.in",
+      });
+    }, 3500);
+
+    return () => clearTimeout(timeout);
+  }, [message]);
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-start px-4 pt-20"
@@ -68,7 +98,6 @@ export default function Home() {
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
-      {}
       <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 px-8 py-4 flex items-center justify-between">
         <span className="text-xl font-semibold text-blue-700">
           Üdv, {user?.username || "Vendég"}!
@@ -80,6 +109,16 @@ export default function Home() {
           Kijelentkezés
         </button>
       </nav>
+
+      {}
+      {message && (
+        <div
+          ref={messageRef}
+          className="mt-4 bg-green-100 text-green-700 px-4 py-2 rounded shadow"
+        >
+          {message}
+        </div>
+      )}
 
       <div
         ref={containerRef}
@@ -115,7 +154,14 @@ export default function Home() {
           ))}
         </div>
 
-        <Cart />
+        {}
+        <Cart
+          onOrderComplete={() => {
+            fetchProducts();
+            setMessage("Sikeres rendelés!");
+            setTimeout(() => setMessage(""), 4000);
+          }}
+        />
       </div>
     </div>
   );

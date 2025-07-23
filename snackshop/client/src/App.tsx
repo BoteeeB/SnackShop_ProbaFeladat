@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import AdminPanel from './pages/AdminPanel';
 import Orders from './pages/Orders';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 
@@ -13,9 +14,15 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/orders" element={<Orders />} />
+        <Route path="/home" element={<ProtectedRoute>
+      <Home />
+    </ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute adminOnly>
+      <AdminPanel />
+    </ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute adminOnly>
+      <Orders />
+    </ProtectedRoute>} />
       </Routes>
 
     </>
