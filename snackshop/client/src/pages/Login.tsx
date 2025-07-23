@@ -18,15 +18,23 @@ export default function Login() {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const formFields = formFieldRefs.current;
+    const timeout = requestAnimationFrame(() => {
+      if (
+        !formContainerRef.current ||
+        !headerRef.current ||
+        !infoContainerRef.current ||
+        !submitButtonRef.current
+      ) return;
 
-    gsap.set(formContainerRef.current, { opacity: 0, y: -50 });
-    gsap.set(headerRef.current, { opacity: 0, y: -20 });
-    gsap.set(formFields, { opacity: 0, x: -50 });
-    gsap.set(infoContainerRef.current, { opacity: 0, y: 30 });
-    gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
+      const formFields = formFieldRefs.current.filter(Boolean);
+      if (formFields.length === 0) return;
 
-    requestAnimationFrame(() => {
+      gsap.set(formContainerRef.current, { opacity: 0, y: -50 });
+      gsap.set(headerRef.current, { opacity: 0, y: -20 });
+      gsap.set(formFields, { opacity: 0, x: -50 });
+      gsap.set(infoContainerRef.current, { opacity: 0, y: 30 });
+      gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
+
       gsap.to(formContainerRef.current, {
         opacity: 1,
         y: 0,
@@ -64,6 +72,8 @@ export default function Login() {
         ease: "back.out(2)",
       });
     });
+
+    return () => cancelAnimationFrame(timeout);
   }, []);
 
   if (isLoading) return null;
@@ -84,16 +94,7 @@ export default function Login() {
         isAdmin: boolean;
       }>("/api/login", form);
 
-      console.log("API response data:", res.data);
-
       login({
-        id: res.data.id,
-        username: res.data.username,
-        email: res.data.email,
-        isAdmin: res.data.isAdmin,
-      });
-
-      console.log("User after login:", {
         id: res.data.id,
         username: res.data.username,
         email: res.data.email,
