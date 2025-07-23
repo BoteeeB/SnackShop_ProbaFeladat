@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { gsap } from "gsap";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
@@ -9,13 +9,17 @@ export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user, isLoading } = useAuth();
+
+if (isLoading) return null;
 
   const formContainerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLHeadingElement>(null);
   const formFieldRefs = useRef<(HTMLDivElement | null)[]>([]);
   const infoContainerRef = useRef<HTMLParagraphElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
+
+  
 
   useEffect(() => {
   const formFields = formFieldRefs.current;
@@ -88,12 +92,13 @@ export default function Login() {
         isAdmin: res.data.isAdmin,
       });
 
-      navigate(res.data.isAdmin ? "/admin" : "/home");
-      console.log("Sikeres bejelentkezés:", res.data);
+       navigate(res.data.isAdmin ? "/admin" : "/home", { replace: true });
     } catch {
       setError("Hibás felhasználónév vagy jelszó.");
     }
   };
+
+  if (user) return <Navigate to={user.isAdmin ? "/admin" : "/home"} replace />;
 
   return (
     <div

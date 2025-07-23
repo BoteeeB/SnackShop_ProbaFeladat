@@ -11,10 +11,13 @@ export default function ProtectedRoute({
   children,
   adminOnly = false,
 }: ProtectedRouteProps) {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
-  if (!user) return <Navigate to="/" />;
-  if (adminOnly && !user.isAdmin) return <Navigate to="/home" />;
-  
-  return children;
+  if (isLoading) return <div className="text-center p-8">Loading...</div>;
+
+
+  if (!user) return <Navigate to="/" replace />;
+  if (adminOnly && !user.isAdmin) return <Navigate to="/home" replace />;
+
+  return <>{children}</>;
 }

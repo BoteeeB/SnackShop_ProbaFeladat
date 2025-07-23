@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import api from "../services/api";
 import { gsap } from "gsap";
+import Navbar from "../components/Navbar";
 
 interface Product {
   id: string;
@@ -98,6 +99,7 @@ export default function AdminPanel() {
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
+      <Navbar />
       <div
         ref={containerRef}
         className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl p-8"
