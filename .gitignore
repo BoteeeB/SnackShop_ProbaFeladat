@@ -1,0 +1,14 @@
+# Node modules
+client/node_modules/
+server/node_modules/
+
+# Build fájlok
+client/dist/
+server/dist/
+
+# IDE fájlok
+.vscode/
+.DS_Store
+
+# Környezeti változók
+.env
