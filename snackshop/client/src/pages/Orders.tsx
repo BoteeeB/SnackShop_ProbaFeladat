@@ -7,6 +7,7 @@ interface Order {
   username: string;
   total_price: number;
   created_at: string;
+  items: string;
 }
 
 export default function Orders() {
@@ -54,6 +55,9 @@ export default function Orders() {
               <span className="text-gray-500">
                 {new Date(order.created_at).toLocaleString()}
               </span>
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              {order.items}
             </p>
           </div>
         ))}
