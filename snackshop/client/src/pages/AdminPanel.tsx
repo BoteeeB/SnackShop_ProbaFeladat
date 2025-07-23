@@ -34,64 +34,70 @@ export default function AdminPanel() {
   }, []);
 
   useEffect(() => {
-    gsap.set(containerRef.current, { opacity: 0, y: -30 });
-    gsap.set(headingRef.current, { opacity: 0, y: -20 });
-    gsap.set(formFieldsRef.current, { opacity: 0, x: -30 });
-    gsap.set(productRefs.current, { opacity: 0, y: 20 });
-    gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
-    gsap.set(ordersButtonRef.current, { opacity: 0, scale: 0.8 });
+  const allFields = formFieldsRef.current.filter(Boolean);
+  const allProducts = productRefs.current.filter(Boolean);
 
-    requestAnimationFrame(() => {
-      gsap.to(containerRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-      });
+  if (
+    !containerRef.current ||
+    !headingRef.current ||
+    !submitButtonRef.current ||
+    !ordersButtonRef.current
+  ) return;
 
-      gsap.to(headingRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        delay: 0.3,
-        ease: "back.out(1.7)",
-      });
+  gsap.set(containerRef.current, { opacity: 0, y: -40 });
+  gsap.set(headingRef.current, { opacity: 0, y: -20 });
+  gsap.set(allFields, { opacity: 0, x: -40 });
+  gsap.set(allProducts, { opacity: 0, y: 30 });
+  gsap.set([submitButtonRef.current, ordersButtonRef.current], { opacity: 0, scale: 0.98 });
 
-      gsap.to(formFieldsRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        delay: 0.5,
-        ease: "power3.out",
-      });
+  requestAnimationFrame(() => {
+    const tl = gsap.timeline();
 
-      gsap.to(productRefs.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        delay: 0.8,
-        ease: "power2.out",
-      });
-
-      gsap.to(submitButtonRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.5,
-        delay: 1,
-        ease: "back.out(1.7)",
-      });
-
-      gsap.to(ordersButtonRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.5,
-        delay: 1.4,
-        ease: "back.out(1.7)",
-      });
+    tl.to(containerRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power2.out",
     });
-  }, [products.length]);
+
+    tl.to(headingRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1.1,
+      ease: "power2.out",
+    }, "-=0.6");
+
+    tl.to(allFields, {
+      opacity: 1,
+      x: 0,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: "power2.out",
+    }, "-=0.7");
+
+    tl.to(allProducts, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.07,
+      ease: "power2.out",
+    }, "-=0.4");
+
+    tl.to(submitButtonRef.current, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.6,
+      ease: "power1.out",
+    }, "-=0.4");
+
+    tl.to(ordersButtonRef.current, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.6,
+      ease: "power1.out",
+    }, "-=0.5");
+  });
+}, [products.length]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
