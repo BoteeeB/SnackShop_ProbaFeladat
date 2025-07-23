@@ -34,50 +34,53 @@ async function authRoutes(fastify, options) {
   });
 
   fastify.post("/api/login", async (request, reply) => {
-    const { username, password } = request.body;
+  const { username, password } = request.body;
 
-    if (!username || !password) {
-      return reply.code(400).send({ error: "Hiányzó adatok" });
+  if (!username || !password) {
+    return reply.code(400).send({ error: "Hiányzó adatok" });
+  }
+
+  try {
+    const user = await dbGet(
+      `SELECT * FROM users WHERE username = ?`,
+      [username]
+    );
+
+    if (!user) {
+      return reply.code(401).send({ error: "Hibás felhasználó/jelszó" });
     }
 
-    try {
-      const user = await dbGet(
-        `SELECT * FROM users WHERE username = ?`,
-        [username]
-      );
-
-      if (!user) {
-        return reply.code(401).send({ error: "Hibás felhasználó/jelszó" });
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        return reply.code(401).send({ error: "Hibás felhasználó/jelszó" });
-      }
-
-      return reply
-        .setCookie(
-          "session",
-          JSON.stringify({
-            userId: user.id,
-            username: user.username,
-            isAdmin: !!user.is_admin
-          }),
-          {
-            httpOnly: true,
-            path: "/"
-          }
-        )
-        .send({
-          authenticated: true,
-          isAdmin: !!user.is_admin
-        });
-
-    } catch (err) {
-      console.error(err);
-      return reply.code(500).send({ error: "Szerverhiba" });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return reply.code(401).send({ error: "Hibás felhasználó/jelszó" });
     }
-  });
+
+    reply.setCookie(
+      "session",
+      JSON.stringify({
+        userId: user.id,
+        username: user.username,
+        isAdmin: !!user.is_admin
+      }),
+      {
+        httpOnly: true,
+        path: "/"
+      }
+    );
+
+    return reply.send({
+      id: user.id,
+      username: user.username,
+      email: user.email || "",
+      isAdmin: !!user.is_admin,
+      authenticated: true
+    });
+
+  } catch (err) {
+    console.error(err);
+    return reply.code(500).send({ error: "Szerverhiba" });
+  }
+});
 }
 
 module.exports = authRoutes;

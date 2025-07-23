@@ -11,65 +11,64 @@ export default function Login() {
   const navigate = useNavigate();
   const { login, user, isLoading } = useAuth();
 
-if (isLoading) return null;
-
   const formContainerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLHeadingElement>(null);
   const formFieldRefs = useRef<(HTMLDivElement | null)[]>([]);
   const infoContainerRef = useRef<HTMLParagraphElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  
-
   useEffect(() => {
-  const formFields = formFieldRefs.current;
+    const formFields = formFieldRefs.current;
 
-  gsap.set(formContainerRef.current, { opacity: 0, y: -50 });
-  gsap.set(headerRef.current, { opacity: 0, y: -20 });
-  gsap.set(formFields, { opacity: 0, x: -50 });
-  gsap.set(infoContainerRef.current, { opacity: 0, y: 30 });
-  gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
+    gsap.set(formContainerRef.current, { opacity: 0, y: -50 });
+    gsap.set(headerRef.current, { opacity: 0, y: -20 });
+    gsap.set(formFields, { opacity: 0, x: -50 });
+    gsap.set(infoContainerRef.current, { opacity: 0, y: 30 });
+    gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
 
-  requestAnimationFrame(() => {
-    gsap.to(formContainerRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: "power2.out",
+    requestAnimationFrame(() => {
+      gsap.to(formContainerRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+      });
+
+      gsap.to(headerRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power2.out",
+      });
+
+      gsap.to(formFields, {
+        opacity: 1,
+        x: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power4.out",
+      });
+
+      gsap.to(infoContainerRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power2.out",
+        delay: 0.5,
+      });
+
+      gsap.to(submitButtonRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: "back.out(2)",
+      });
     });
+  }, []);
 
-    gsap.to(headerRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 1.5,
-      ease: "power2.out",
-    });
+  if (isLoading) return null;
 
-    gsap.to(formFields, {
-      opacity: 1,
-      x: 0,
-      duration: 0.7,
-      stagger: 0.1,
-      ease: "power4.out",
-    });
-
-    gsap.to(infoContainerRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 1.2,
-      ease: "power2.out",
-      delay: 0.5,
-    });
-
-    gsap.to(submitButtonRef.current, {
-      opacity: 1,
-      scale: 1,
-      duration: 1,
-      ease: "back.out(2)",
-    });
-  });
-}, []);
-
+  if (user) return <Navigate to={user.isAdmin ? "/admin" : "/home"} replace />;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -85,6 +84,8 @@ if (isLoading) return null;
         isAdmin: boolean;
       }>("/api/login", form);
 
+      console.log("API response data:", res.data);
+
       login({
         id: res.data.id,
         username: res.data.username,
@@ -92,13 +93,19 @@ if (isLoading) return null;
         isAdmin: res.data.isAdmin,
       });
 
-       navigate(res.data.isAdmin ? "/admin" : "/home", { replace: true });
-    } catch {
+      console.log("User after login:", {
+        id: res.data.id,
+        username: res.data.username,
+        email: res.data.email,
+        isAdmin: res.data.isAdmin,
+      });
+
+      navigate(res.data.isAdmin ? "/admin" : "/home", { replace: true });
+    } catch (err) {
+      console.error("Login error:", err);
       setError("Hibás felhasználónév vagy jelszó.");
     }
   };
-
-  if (user) return <Navigate to={user.isAdmin ? "/admin" : "/home"} replace />;
 
   return (
     <div
@@ -124,8 +131,8 @@ if (isLoading) return null;
           <div
             className="form-field"
             ref={(el) => {
-  formFieldRefs.current[0] = el;
-}}
+              formFieldRefs.current[0] = el;
+            }}
           >
             <label className="block mb-2 font-medium text-gray-700">
               Felhasználónév
@@ -144,8 +151,8 @@ if (isLoading) return null;
           <div
             className="form-field"
             ref={(el) => {
-  formFieldRefs.current[1] = el;
-}}
+              formFieldRefs.current[1] = el;
+            }}
           >
             <label className="block mb-2 font-medium text-gray-700">
               Jelszó

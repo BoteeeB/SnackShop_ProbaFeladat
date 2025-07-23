@@ -3,8 +3,7 @@ import api from "../services/api";
 import { useCart } from "../context/CartContext";
 import Cart from "../components/Cart";
 import { gsap } from "gsap";
-
-import { useAuth } from "../context/AuthContext";
+import Navbar from "../components/Navbar";
 
 interface Product {
   id: string;
@@ -18,7 +17,6 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const { addToCart } = useCart();
 
-  const { user, logout } = useAuth();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -98,19 +96,8 @@ export default function Home() {
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
-      <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 px-8 py-4 flex items-center justify-between">
-        <span className="text-xl font-semibold text-blue-700">
-          Üdv, {user?.username || "Vendég"}!
-        </span>
-        <button
-          onClick={logout}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-        >
-          Kijelentkezés
-        </button>
-      </nav>
+      <Navbar /> {}
 
-      {}
       {message && (
         <div
           ref={messageRef}
@@ -154,7 +141,6 @@ export default function Home() {
           ))}
         </div>
 
-        {}
         <Cart
           onOrderComplete={() => {
             fetchProducts();
