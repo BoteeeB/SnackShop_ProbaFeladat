@@ -11,6 +11,7 @@ export default function Cart({ onOrderComplete }: CartProps) {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
   const [message, setMessage] = useState("");
   const messageRef = useRef<HTMLParagraphElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleOrder = async () => {
     try {
@@ -25,12 +26,10 @@ export default function Cart({ onOrderComplete }: CartProps) {
 
   useEffect(() => {
     if (!message) return;
-
     const el = messageRef.current;
     if (!el) return;
 
     gsap.set(el, { opacity: 0, y: 10 });
-
     gsap.to(el, {
       opacity: 1,
       y: 0,
@@ -54,17 +53,34 @@ export default function Cart({ onOrderComplete }: CartProps) {
     };
   }, [message]);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+    gsap.set(containerRef.current, { opacity: 0, y: -30 });
+    requestAnimationFrame(() => {
+      gsap.to(containerRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    });
+  }, []);
+
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="mt-8 bg-gray-50 p-4 rounded">
-      <h2 className="text-xl font-bold mb-2 text-black">Kosár</h2>
+    <div
+      ref={containerRef}
+      className="mt-10 backdrop-blur-md bg-white/90 p-8 rounded-3xl shadow-2xl max-w-2xl mx-auto border border-gray-200 transition-all"
+    >
+      <h2 className="text-3xl font-extrabold mb-6 text-blue-700 text-center drop-shadow">
+        Kosár
+      </h2>
 
-      {}
       {message && (
         <p
           ref={messageRef}
-          className={`mb-4 font-semibold ${
+          className={`mb-6 text-center font-semibold ${
             message.startsWith("Sikeres") ? "text-green-600" : "text-red-600"
           }`}
         >
@@ -73,44 +89,53 @@ export default function Cart({ onOrderComplete }: CartProps) {
       )}
 
       {cart.length === 0 ? (
-        <p className="text-black">A kosár üres.</p>
+        <p className="text-center text-gray-500 text-lg">A kosár üres.</p>
       ) : (
         <>
-          <ul>
+          <ul className="space-y-6">
             {cart.map((item) => (
-              <li key={item.id} className="flex justify-between items-center py-2 text-black">
-                <div>
+              <li
+                key={item.id}
+                className="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-gray-200"
+              >
+                <div className="text-gray-800 font-medium text-lg">
                   {item.name} – {item.price} Ft x
                   <input
                     type="number"
                     min="1"
                     max={item.stock}
                     value={item.quantity}
-                    onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                    className="w-12 ml-2 border rounded bg-red-400"
+                    onChange={(e) =>
+                      updateQuantity(item.id, parseInt(e.target.value))
+                    }
+                    className="w-16 ml-2 border border-gray-300 rounded px-2 py-1 text-black bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                   />
                 </div>
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="text-red-500"
+                  className="bg-red-600 text-white px-3 py-2 rounded-md text-sm font-semibold hover:bg-red-700 transition"
                 >
                   Törlés
                 </button>
               </li>
             ))}
           </ul>
-          <p className="mt-2 font-bold text-black">Végösszeg: {total} Ft</p>
-          <div className="mt-2 flex gap-2">
+
+          <p className="mt-6 text-right text-xl font-bold text-gray-800">
+            Végösszeg: {total} Ft
+          </p>
+
+          <div className="mt-6 flex justify-end gap-4">
             <button
               onClick={handleOrder}
-              className="bg-green-600 text-white px-4 py-2 rounded"
               disabled={cart.length === 0}
+              className="bg-green-600 text-white px-5 py-3 rounded-xl font-semibold text-md hover:bg-green-700 transition disabled:opacity-50"
             >
               Rendelés leadása
             </button>
             <button
               onClick={clearCart}
-              className="bg-gray-300 text-black px-4 py-2 rounded"
+              className="bg-gray-200 text-gray-800 px-5 py-3 rounded-xl font-semibold text-md hover:bg-gray-300 transition"
             >
               Kosár ürítése
             </button>
