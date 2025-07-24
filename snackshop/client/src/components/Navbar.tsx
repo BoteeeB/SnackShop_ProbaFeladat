@@ -16,7 +16,6 @@ export default function Navbar() {
     <>
       <nav className="w-full bg-white shadow-md px-4 py-3 fixed top-0 left-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Brand + Desktop user info */}
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold text-blue-700">SnackShop</h1>
             {user && (
@@ -26,7 +25,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen((o) => !o)}
             className="md:hidden text-gray-700 p-1 active:scale-90 transition-transform duration-200 focus:outline-none"
@@ -64,7 +62,6 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Menu items panel */}
           <div
             className={[
               "absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent",
@@ -112,8 +109,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-
-      {/* spacer equal to nav height so page content sits below */}
       <div className="h-12 md:h-12" />
     </>
   );
