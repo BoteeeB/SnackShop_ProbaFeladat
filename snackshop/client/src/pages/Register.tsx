@@ -7,6 +7,7 @@ import FallingSnacks from "../components/FallingSnacks";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -141,7 +142,7 @@ export default function Register() {
             ref={(el) => {
               formFieldRefs.current[1] = el;
             }}
-            className="w-full"
+            className="w-full relative"
           >
             <label
               className="block mb-2 text-[#333333] font-medium"
@@ -150,14 +151,68 @@ export default function Register() {
               Jelszó
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={form.password}
               onChange={handleChange}
               autoComplete="current-password"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-[68%] right-[0%] transform -translate-y-1/2 text-[#FF6F61] hover:text-[#FF6F61] focus:outline-none"
+              aria-label={showPassword ? "Rejtse el a jelszót" : "Jelszó megjelenítése"}
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17.94 17.94a9.969 9.969 0 01-5.94 1.88c-5 0-9-7-9-7a13.57 13.57 0 013.36-4.74"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 3l18 18"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 5c5 0 9 7 9 7s-4 7-9 7-9-7-9-7 4-7 9-7z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                  />
+                </svg>
+              )}
+            </button>
           </div>
 
           <button
