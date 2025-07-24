@@ -19,7 +19,6 @@ export default function Orders() {
 
   useEffect(() => {
     api.get<Order[]>("/api/orders").then((res) => {
-      console.log("Orders response:", res.data);
       setOrders(res.data);
     });
   }, []);
@@ -32,7 +31,6 @@ export default function Orders() {
 
     requestAnimationFrame(() => {
       const tl = gsap.timeline();
-
       tl.to(orderRefs.current, {
         opacity: 1,
         y: 0,
@@ -40,24 +38,31 @@ export default function Orders() {
         stagger: 0.1,
         ease: "power2.out",
       });
-
-      tl.to(backButtonRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      }, "-=0.3");
+      tl.to(
+        backButtonRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.3"
+      );
     });
   }, [orders.length]);
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex flex-col items-center px-4"
       style={{
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
       <Navbar />
+
+      {}
+      <div className="h-12 md:h-12" />
+
       <div
         ref={containerRef}
         className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-8"
@@ -76,7 +81,8 @@ export default function Orders() {
               className="bg-gray-100 p-4 rounded-lg shadow-sm border border-gray-200"
             >
               <p className="text-lg text-gray-800 font-medium">
-                <span className="text-blue-700">{order.username}</span> – {order.total_price} Ft –{" "}
+                <span className="text-blue-700">{order.username}</span> –{" "}
+                {order.total_price} Ft –{" "}
                 <span className="text-gray-500">
                   {new Date(order.created_at).toLocaleString()}
                 </span>
@@ -86,7 +92,9 @@ export default function Orders() {
           ))}
 
           {orders.length === 0 && (
-            <p className="text-center text-gray-500">Nincsenek rendelési adatok.</p>
+            <p className="text-center text-gray-500">
+              Nincsenek rendelési adatok.
+            </p>
           )}
         </div>
       </div>
