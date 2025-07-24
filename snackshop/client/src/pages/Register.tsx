@@ -100,7 +100,7 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
           {error && (
             <p
-              className="text-[#333333] text-center"
+              className="text-red-600 text-center font-bold"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               {error}
@@ -108,7 +108,7 @@ export default function Register() {
           )}
           {success && (
             <p
-              className="text-[#88B04B] text-center"
+              className="text-[#88B04B] text-center font-medium"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               Sikeres regisztráció!
@@ -122,7 +122,7 @@ export default function Register() {
             className="w-full"
           >
             <label
-              className="block mb-2 text-[#333333] font-medium"
+              className="block mb-2 text-[#333333] font-bold"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               Felhasználónév
@@ -134,7 +134,7 @@ export default function Register() {
               onChange={handleChange}
               autoComplete="username"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              className="w-full border font-bold border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
           </div>
 
@@ -145,7 +145,7 @@ export default function Register() {
             className="w-full relative"
           >
             <label
-              className="block mb-2 text-[#333333] font-medium"
+              className="block mb-2 text-[#333333] font-bold"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               Jelszó
@@ -157,7 +157,7 @@ export default function Register() {
               onChange={handleChange}
               autoComplete="current-password"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              className="w-full border font-bold border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
 
             <button
@@ -227,13 +227,13 @@ export default function Register() {
 
         <p
           ref={infoContainerRef}
-          className="mt-8 text-base text-center text-[#333333]"
+          className="mt-8 text-base text-center font-bold text-[#333333]"
           style={{ fontFamily: "Karla, sans-serif" }}
         >
           Már van fiókod?{" "}
           <a
             href="/"
-            className="underline text-[#FF6F61] hover:text-[#D35400]"
+            className="underline text-[#FF6F61] font-bold hover:text-[#D35400]"
           >
             Bejelentkezés
           </a>

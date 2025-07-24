@@ -127,7 +127,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
           {error && (
             <p
-              className="text-[#333333] text-center"
+              className="text-red-600 text-center font-semibold"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               {error}
@@ -141,7 +141,7 @@ export default function Login() {
             className="w-full"
           >
             <label
-              className="block mb-2 font-medium text-[#333333]"
+              className="block mb-2 font-bold text-[#333333]"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               Felhasználónév
@@ -153,7 +153,7 @@ export default function Login() {
               onChange={handleChange}
               autoComplete="username"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              className="w-full border font-bold border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
           </div>
 
@@ -164,7 +164,7 @@ export default function Login() {
             className="w-full relative"
           >
             <label
-              className="block mb-2 font-medium text-[#333333]"
+              className="block mb-2 font-bold text-[#333333]"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               Jelszó
@@ -176,7 +176,7 @@ export default function Login() {
               onChange={handleChange}
               autoComplete="current-password"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              className="w-full border font-bold border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
             <button
               type="button"
@@ -245,13 +245,13 @@ export default function Login() {
 
         <p
           ref={infoContainerRef}
-          className="mt-8 text-base text-center text-[#333333]"
+          className="mt-8 text-base text-center font-bold text-[#333333]"
           style={{ fontFamily: "Karla, sans-serif" }}
         >
           Nincs fiókod?{" "}
           <a
             href="/register"
-            className="underline text-[#FF6F61] hover:text-[#D35400]"
+            className="underline text-[#FF6F61] hover:text-[#D35400] font-bold"
           >
             Regisztráció
           </a>
