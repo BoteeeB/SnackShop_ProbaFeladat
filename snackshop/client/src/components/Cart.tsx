@@ -47,7 +47,7 @@ export default function Cart({ onOrderComplete }: CartProps) {
         ease: "power2.in",
         onComplete: () => setMessage(""),
       });
-    }, 4000);
+    }, 8000);
 
     return () => {
       clearTimeout(timer);
@@ -72,8 +72,23 @@ export default function Cart({ onOrderComplete }: CartProps) {
   const handleOrder = async () => {
     try {
       const res = await api.post("/api/order", { cart });
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+      const cartSummary = cart
+        .map(
+          (item) =>
+            `${item.name} (${item.quantity} db) - ${
+              item.price * item.quantity
+            } Ft`
+        )
+        .join(", ");
+
       clearCart();
-      setMessage(`Sikeres rendelés! Összeg: ${res.data.total} Ft`);
+
+      setMessage(
+        `✅ Sikeres rendelés!\nVégösszeg: ${res.data.total} Ft.\nKosár tartalma:\n${cartSummary.replace(/, /g, "\n")}`
+      );
+
       onOrderComplete?.();
     } catch {
       setMessage("Rendelés sikertelen.");
@@ -127,13 +142,16 @@ export default function Cart({ onOrderComplete }: CartProps) {
 
   return (
     <div
-    ref={containerRef}
-    className="p-8 bg-[#FFF5E4] rounded-3xl shadow-2xl max-w-2xl"
-    style={{ fontFamily: "Karla, sans-serif" }}
+      ref={containerRef}
+      className="p-8 bg-[#FFF5E4] rounded-3xl shadow-2xl max-w-2xl"
+      style={{ fontFamily: "Karla, sans-serif" }}
     >
       <h2
         className="text-3xl font-extrabold mb-6 text-[#FF6F61] text-center"
-        style={{ fontFamily: "Poppins, sans-serif" }}
+        style={{
+          fontFamily: "Poppins, sans-serif",
+          textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+        }}
       >
         Kosár
       </h2>
@@ -142,17 +160,25 @@ export default function Cart({ onOrderComplete }: CartProps) {
         <p
           ref={messageRef}
           className={`mb-6 text-center font-semibold ${
-            message.startsWith("Sikeres")
-              ? "text-[#88B04B]"
-              : "text-[#FF6F61]"
+            message.startsWith("Sikeres") ? "text-[#88B04B]" : "text-[#FF6F61]"
           }`}
+          style={{
+            fontFamily: "Poppins, sans-serif",
+            textShadow: "0 1px 1px rgba(0,0,0,0.1)",
+            fontSize: "1.25rem",
+            whiteSpace: "pre-line",
+            lineHeight: "1.6",
+          }}
         >
           {message}
         </p>
       )}
 
       {cart.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg">
+        <p
+          className="text-center text-gray-500 text-lg font-extrabold"
+          style={{ fontFamily: "Poppins, sans-serif" }}
+        >
           A kosár üres.
         </p>
       ) : (
@@ -163,8 +189,24 @@ export default function Cart({ onOrderComplete }: CartProps) {
                 key={item.id}
                 className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-md"
               >
-                <div className="text-gray-800 font-medium text-lg">
-                  {item.name} – {item.price} Ft x{" "}
+                <div
+                  className="text-gray-800 font-extrabold text-lg"
+                  style={{
+                    fontFamily: "Poppins, sans-serif",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {item.name} –{" "}
+                  <span
+                    className="text-[#FF6F61]"
+                    style={{
+                      fontWeight: 700,
+                      textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    {item.price} Ft
+                  </span>{" "}
+                  x{" "}
                   <input
                     type="number"
                     min="1"
@@ -180,11 +222,13 @@ export default function Cart({ onOrderComplete }: CartProps) {
                       updateQuantity(item.id, parseInt(t.value, 10));
                     }}
                     className="w-16 ml-2 border border-gray-300 rounded-lg px-2 py-1 text-black bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition"
+                    style={{ fontFamily: "Poppins, sans-serif", fontWeight: "600" }}
                   />
                 </div>
                 <button
                   onClick={(e) => handleRemove(item.id, e)}
-                  className="bg-[#FF6F61] text-white px-3 py-2 rounded-full uppercase text-sm font-semibold tracking-wide hover:bg-[#F1C40F] transition"
+                  className="bg-[#FF6F61] text-white px-3 py-2 rounded-full uppercase text-sm font-bold tracking-wide hover:bg-[#F1C40F] transition"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Törlés
                 </button>
@@ -192,8 +236,15 @@ export default function Cart({ onOrderComplete }: CartProps) {
             ))}
           </ul>
 
-          <p className="mt-6 text-right text-xl font-bold text-gray-800">
-            Végösszeg: {total} Ft
+          <p
+            className="mt-6 text-right text-xl font-extrabold text-gray-800"
+            style={{
+              fontFamily: "Poppins, sans-serif",
+              textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+            }}
+          >
+            Végösszeg:{" "}
+            <span className="text-[#FF6F61]">{total} Ft</span>
           </p>
 
           <div className="mt-6 flex justify-end gap-4">

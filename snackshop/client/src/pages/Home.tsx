@@ -94,7 +94,14 @@ export default function Home() {
       {message && (
         <div
           ref={messageRef}
-          className="mt-4 bg-[#DFF2E1] text-[#388E3C] px-4 py-2 rounded shadow"
+          className="mt-4 px-4 py-2 rounded shadow"
+          style={{
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 800,
+            textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+            backgroundColor: message.startsWith("Sikeres") ? "#DFF2E1" : "#DFF2E1",
+            color: message.startsWith("Sikeres") ? "#388E3C" : "#388E3C",
+          }}
         >
           {message}
         </div>

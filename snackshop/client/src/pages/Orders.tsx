@@ -80,14 +80,14 @@ export default function Orders() {
               ref={(el) => { orderRefs.current[idx] = el; }}
               className="bg-white p-6 rounded-2xl shadow-md border border-gray-200"
             >
-              <p className="text-lg text-[#333333] font-medium">
+              <p className="text-lg text-[#333333] font-extrabold">
                 <span className="text-[#FF6F61]">{order.username}</span> –{" "}
                 {order.total_price} Ft –{" "}
                 <span className="text-gray-500">
                   {new Date(order.created_at).toLocaleString()}
                 </span>
               </p>
-              <p className="mt-2 text-sm text-[#555555]">
+              <p className="mt-2 text-sm text-[#555555] font-extrabold">
                 {order.items}
               </p>
             </div>

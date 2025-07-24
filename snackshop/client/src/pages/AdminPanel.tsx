@@ -150,7 +150,7 @@ export default function AdminPanel() {
         </h1>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 mb-8">
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 font-extrabold">
             <input
               type="text"
               placeholder="Név"
@@ -218,7 +218,7 @@ export default function AdminPanel() {
               }}
               className="flex justify-between items-center bg-white p-4 rounded-2xl shadow hover:shadow-md transition"
             >
-              <span className="text-gray-800 font-medium">
+              <span className="text-gray-800 font-extrabold">
                 {p.name} – <span className="text-[#FF6F61]">{p.price} Ft</span> –{" "}
                 <span className="text-[#88B04B]">{p.stock} db</span>
               </span>
