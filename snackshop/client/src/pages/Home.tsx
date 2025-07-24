@@ -123,16 +123,55 @@ export default function Home() {
                 className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transform hover:-translate-y-1 transition"
               >
                 <h2
-                  className="text-lg font-semibold text-[#333333] mb-2"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
+                  className="text-xl font-extrabold text-[#333333] mb-3"
+                  style={{
+                    fontFamily: "Poppins, sans-serif",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                  }}
                 >
                   {product.name}
                 </h2>
-                <p className="text-sm text-[#333333] mb-1">
-                  Ár: <span className="font-medium">{product.price} Ft</span>
+                <p
+                  className="text-xl font-extrabold mb-1"
+                  style={{
+                    fontFamily: "Poppins, sans-serif",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                    color: "#FF6F61",
+                  }}
+                >
+                  Ár:{" "}
+                  <span
+                    className="font-extrabold"
+                    style={{
+                      color: "#555555",
+                      fontFamily: "Poppins, sans-serif",
+                      textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    {product.price} Ft
+                  </span>
                 </p>
-                <p className="text-sm text-[#333333] mb-4">
-                  Készlet: <span className="font-medium">{product.stock}</span>
+                <p
+                  className="text-lg font-extrabold mb-4"
+                  style={{
+                    fontFamily: "Poppins, sans-serif",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                    textTransform: "uppercase",
+                    color: "#4B5563",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  Készlet:{" "}
+                  <span
+                    className="font-extrabold"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                      color: "#374151",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                  >
+                    {product.stock}
+                  </span>
                 </p>
                 <button
                   onClick={() => {
