@@ -6,8 +6,23 @@ const cookie = require("@fastify/cookie");
 const app = Fastify({ logger: true });
 
 app.register(cors, {
-  origin: true,
-  credentials: true
+  origin: "http://localhost:5173", 
+  credentials: true,               
+  methods: [                        
+    "GET",
+    "HEAD",
+    "PUT",
+    "PATCH",
+    "POST",
+    "DELETE",
+    "OPTIONS"
+  ],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Set-Cookie",
+    "Cookie"
+  ]
 });
 app.register(cookie);
 app.register(require('./routes/auth'));
