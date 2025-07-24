@@ -115,7 +115,12 @@ export default function Login() {
           className="text-5xl font-extrabold mb-10 text-[#FF6F61] text-center"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
-          SnackShop
+          <img
+                src="/images/snackshop_logo (1).png"
+                alt="SnackShop"
+                className="h-10 w-auto transform scale-[2.5] md:scale-[6]"
+                style={{ marginTop: "0.2rem" }}
+              />
         </h1>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">

@@ -20,17 +20,14 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <h1
-              className="text-2xl font-bold text-[#FF6F61]"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              SnackShop
-            </h1>
-            {user && (
-              <span className="hidden md:inline text-[#333333]">
-                Bejelentkezve mint: <strong>{user.username}</strong>
-              </span>
-            )}
+            <div className="flex-shrink-0 relative h-10 overflow-visible">
+              <img
+                src="/images/snackshop_logo (1).png"
+                alt="SnackShop"
+                className="h-10 w-auto transform scale-[2.5] md:scale-[3] origin-left"
+                style={{ marginTop: "0.2rem" }}
+              />
+            </div>
           </div>
 
           <button
@@ -82,9 +79,6 @@ export default function Navbar() {
           >
             {user && (
               <div className="flex flex-col md:flex-row items-center gap-4 p-4 md:p-0">
-                <span className="md:hidden text-[#333333] mb-2">
-                  Bejelentkezve: <strong>{user.username}</strong>
-                </span>
 
                 {user.isAdmin && (
                   <>
@@ -105,6 +99,18 @@ export default function Navbar() {
                       Admin kezdőlap
                     </Link>
                     <span className="text-[#333333] mx-2 hidden md:inline">|</span>
+                  </>
+                )}
+
+                {!user.isAdmin && (
+                  <>
+                    <span
+                      className="hidden md:inline bg-[#FF6F61] text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold select-none"
+                      style={{ fontFamily: "Poppins, sans-serif", userSelect: "none", pointerEvents: "none" }}
+                    >
+                      {user.username}
+                    </span>
+                    <span className="hidden md:inline text-[#333333] mx-2">|</span>
                   </>
                 )}
 
