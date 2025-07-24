@@ -17,7 +17,6 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const { addToCart } = useCart();
 
-
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -96,7 +95,7 @@ export default function Home() {
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
-      <Navbar /> {}
+      <Navbar />
 
       {message && (
         <div
@@ -132,7 +131,7 @@ export default function Home() {
               <p className="text-sm text-black">Készlet: {product.stock}</p>
               <button
                 onClick={() => addToCart({ ...product, quantity: 1 })}
-                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-xl hover:rounded-md hover:bg-blue-700 transition-all duration-300"
                 disabled={product.stock === 0}
               >
                 Kosárba

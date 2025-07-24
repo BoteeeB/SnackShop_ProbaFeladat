@@ -113,7 +113,7 @@ export default function Cart({ onOrderComplete }: CartProps) {
                 </div>
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="bg-red-600 text-white px-3 py-2 rounded-md text-sm font-semibold hover:bg-red-700 transition"
+                  className="bg-red-600 text-white px-3 py-2 rounded-xl hover:bg-red-700 hover:rounded-md transition-all duration-300 text-sm font-semibold"
                 >
                   Törlés
                 </button>
@@ -129,13 +129,13 @@ export default function Cart({ onOrderComplete }: CartProps) {
             <button
               onClick={handleOrder}
               disabled={cart.length === 0}
-              className="bg-green-600 text-white px-5 py-3 rounded-xl font-semibold text-md hover:bg-green-700 transition disabled:opacity-50"
+              className="bg-green-600 text-white px-5 py-3 rounded-xl font-semibold text-md hover:bg-green-700 hover:rounded-md transition-all duration-300 disabled:opacity-50"
             >
               Rendelés leadása
             </button>
             <button
               onClick={clearCart}
-              className="bg-gray-200 text-gray-800 px-5 py-3 rounded-xl font-semibold text-md hover:bg-gray-300 transition"
+              className="bg-gray-200 text-gray-800 px-5 py-3 rounded-xl font-semibold text-md hover:bg-gray-300 hover:rounded-md transition-all duration-300"
             >
               Kosár ürítése
             </button>

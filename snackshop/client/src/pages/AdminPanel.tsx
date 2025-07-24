@@ -22,7 +22,6 @@ export default function AdminPanel() {
   const formFieldsRef = useRef<(HTMLInputElement | null)[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
-  const ordersButtonRef = useRef<HTMLButtonElement>(null);
 
   const navigate = useNavigate();
 
@@ -40,15 +39,14 @@ export default function AdminPanel() {
   if (
     !containerRef.current ||
     !headingRef.current ||
-    !submitButtonRef.current ||
-    !ordersButtonRef.current
+    !submitButtonRef.current
   ) return;
 
   gsap.set(containerRef.current, { opacity: 0, y: -40 });
   gsap.set(headingRef.current, { opacity: 0, y: -20 });
   gsap.set(allFields, { opacity: 0, x: -40 });
   gsap.set(allProducts, { opacity: 0, y: 30 });
-  gsap.set([submitButtonRef.current, ordersButtonRef.current], { opacity: 0, scale: 0.98 });
+  gsap.set([submitButtonRef.current], { opacity: 0, scale: 0.98 });
 
   requestAnimationFrame(() => {
     const tl = gsap.timeline();
@@ -89,13 +87,6 @@ export default function AdminPanel() {
       duration: 0.6,
       ease: "power1.out",
     }, "-=0.4");
-
-    tl.to(ordersButtonRef.current, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.6,
-      ease: "power1.out",
-    }, "-=0.5");
   });
 }, [products.length]);
 
@@ -183,10 +174,11 @@ export default function AdminPanel() {
           <button
             ref={submitButtonRef}
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition"
+            className="w-full bg-blue-600 text-white py-3 rounded-xl hover:rounded-md font-semibold text-lg hover:bg-blue-700 transition-all duration-300"
           >
             {editingId ? "Módosít" : "Hozzáad"}
           </button>
+
         </form>
 
         <div className="grid gap-4">
@@ -205,13 +197,13 @@ export default function AdminPanel() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(p)}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-xl hover:rounded-md hover:bg-yellow-600 transition-all duration-300"
                 >
                   Módosít
                 </button>
                 <button
                   onClick={() => handleDelete(p.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                  className="bg-red-600 text-white px-4 py-2 rounded-xl hover:rounded-md hover:bg-red-700 transition-all duration-300"
                 >
                   Törlés
                 </button>
@@ -219,14 +211,6 @@ export default function AdminPanel() {
             </div>
           ))}
         </div>
-
-        <button
-          ref={ordersButtonRef}
-          onClick={() => navigate("/orders")}
-          className="mt-8 w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-indigo-700 transition"
-        >
-          Rendelések megtekintése
-        </button>
       </div>
     </div>
   );
