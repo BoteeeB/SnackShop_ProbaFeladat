@@ -35,7 +35,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen((o) => !o)}
-            className="md:hidden text-[#333333] p-2 active:scale-95 transition-transform duration-200 focus:outline-none"
+            className="md:hidden text-[#FF6F61] hover:text-[#F1C40F] p-2 active:scale-95 transition-transform duration-200 focus:outline-none"
           >
             {menuOpen ? (
               <svg
@@ -43,7 +43,7 @@ export default function Navbar() {
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="#333333"
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
@@ -58,7 +58,7 @@ export default function Navbar() {
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="#333333"
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
@@ -104,12 +104,13 @@ export default function Navbar() {
                     >
                       Admin kezdőlap
                     </Link>
+                    <span className="text-[#333333] mx-2 hidden md:inline">|</span>
                   </>
                 )}
 
                 <button
                   onClick={handleLogout}
-                  className="block md:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
+                  className="block md:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white hover:text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Kijelentkezés

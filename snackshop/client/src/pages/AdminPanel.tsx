@@ -161,7 +161,7 @@ export default function AdminPanel() {
               ref={(el) => {
                 formFieldsRef.current[0] = el;
               }}
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
 
             <input
@@ -178,7 +178,7 @@ export default function AdminPanel() {
               ref={(el) => {
                 formFieldsRef.current[1] = el;
               }}
-              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
+              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
 
             <input
@@ -195,7 +195,7 @@ export default function AdminPanel() {
               ref={(el) => {
                 formFieldsRef.current[2] = el;
               }}
-              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
+              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
           </div>
 

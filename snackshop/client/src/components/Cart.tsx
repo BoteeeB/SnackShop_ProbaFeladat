@@ -179,7 +179,7 @@ export default function Cart({ onOrderComplete }: CartProps) {
                       );
                       updateQuantity(item.id, parseInt(t.value, 10));
                     }}
-                    className="w-16 ml-2 border border-gray-300 rounded-lg px-2 py-1 text-black bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition"
+                    className="w-16 ml-2 border border-gray-300 rounded-lg px-2 py-1 text-black bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition"
                   />
                 </div>
                 <button
