@@ -9,6 +9,12 @@ export default function FallingSnacks({ count = 60 }: FallingSnacksProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const snackIcons = ["🍿", "🍫", "🍬", "🍪", "🍩"];
 
+  const iconsRef = useRef<string[]>(
+    Array.from({ length: count }).map(
+      () => snackIcons[Math.floor(Math.random() * snackIcons.length)]
+    )
+  );
+
   useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -43,16 +49,11 @@ export default function FallingSnacks({ count = 60 }: FallingSnacksProps) {
       ref={containerRef}
       className="absolute inset-0 overflow-hidden pointer-events-none z-0 invisible"
     >
-      {Array.from({ length: count }).map((_, i) => {
-        const Icon = snackIcons[
-          Math.floor(Math.random() * snackIcons.length)
-        ];
-        return (
-          <div key={i} className="absolute text-3xl opacity-20">
-            {Icon}
-          </div>
-        );
-      })}
+      {iconsRef.current.map((Icon, i) => (
+        <div key={i} className="absolute text-3xl opacity-20">
+          {Icon}
+        </div>
+      ))}
     </div>
   );
 }
