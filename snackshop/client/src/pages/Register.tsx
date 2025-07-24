@@ -107,7 +107,7 @@ export default function Register() {
           )}
           {success && (
             <p
-              className="text-[#333333] text-center"
+              className="text-[#88B04B] text-center"
               style={{ fontFamily: "Karla, sans-serif" }}
             >
               Sikeres regisztráció!
