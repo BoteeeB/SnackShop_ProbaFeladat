@@ -86,7 +86,7 @@ export default function Cart({ onOrderComplete }: CartProps) {
       clearCart();
 
       setMessage(
-        `✅ Sikeres rendelés!\nVégösszeg: ${res.data.total} Ft.\nKosár tartalma:\n${cartSummary.replace(/, /g, "\n")}`
+        `✅ Sikeres rendelés!\nVégösszeg: ${res.data.total} Ft.\n\n🛒Kosár tartalma:\n${cartSummary.replace(/, /g, "\n")}`
       );
 
       onOrderComplete?.();
