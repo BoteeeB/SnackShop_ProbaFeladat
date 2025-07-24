@@ -91,14 +91,6 @@ export default function Orders() {
             <p className="text-center text-gray-500">Nincsenek rendelési adatok.</p>
           )}
         </div>
-
-        <button
-          ref={backButtonRef}
-          onClick={() => navigate("/admin")}
-          className="mt-8 w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition"
-        >
-          Vissza az admin felületre
-        </button>
       </div>
     </div>
   );
