@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import api from "../services/api";
 import { gsap } from "gsap";
@@ -36,21 +36,16 @@ export default function AdminPanel() {
   }, []);
 
   useEffect(() => {
-    const allFields = formFieldsRef.current.filter(Boolean);
-    const allProducts = productRefs.current.filter(Boolean);
-
-    if (
-      !containerRef.current ||
-      !headingRef.current ||
-      !submitButtonRef.current
-    )
+    const fields = formFieldsRef.current.filter(Boolean);
+    const cards = productRefs.current.filter(Boolean);
+    if (!containerRef.current || !headingRef.current || !submitButtonRef.current)
       return;
 
     const tl = gsap.timeline();
     gsap.set(containerRef.current, { opacity: 0, y: -40 });
     gsap.set(headingRef.current, { opacity: 0, y: -20 });
-    gsap.set(allFields, { opacity: 0, x: -40 });
-    gsap.set(allProducts, { opacity: 0, y: 30 });
+    gsap.set(fields, { opacity: 0, x: -40 });
+    gsap.set(cards, { opacity: 0, y: 30 });
     gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.98 });
 
     tl.to(containerRef.current, {
@@ -65,12 +60,12 @@ export default function AdminPanel() {
         "-=0.6"
       )
       .to(
-        allFields,
+        fields,
         { opacity: 1, x: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" },
         "-=0.7"
       )
       .to(
-        allProducts,
+        cards,
         { opacity: 1, y: 0, duration: 0.6, stagger: 0.07, ease: "power2.out" },
         "-=0.4"
       )
@@ -83,14 +78,9 @@ export default function AdminPanel() {
     const newCount = products.length;
     if (newCount > prevCount.current) {
       const idx = newCount - 1;
-      const newEl = productRefs.current[idx];
-      if (newEl) {
-        gsap.from(newEl, {
-          opacity: 0,
-          y: -20,
-          duration: 0.5,
-          ease: "power2.out",
-        });
+      const el = productRefs.current[idx];
+      if (el) {
+        gsap.from(el, { opacity: 0, y: -20, duration: 0.5, ease: "power2.out" });
       }
     }
     prevCount.current = newCount;
@@ -98,25 +88,19 @@ export default function AdminPanel() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (editingId) {
       await api.put(`/api/products/${editingId}`, form);
     } else {
       await api.post("/api/products", form);
     }
-
     setForm({ name: "", price: 0, stock: 0 });
     setEditingId(null);
     fetchProducts();
   };
 
-  const handleEdit = (product: Product) => {
-    setForm({
-      name: product.name,
-      price: product.price,
-      stock: product.stock,
-    });
-    setEditingId(product.id);
+  const handleEdit = (p: Product) => {
+    setForm({ name: p.name, price: p.price, stock: p.stock });
+    setEditingId(p.id);
   };
 
   const handleDelete = (id: string) => {
@@ -137,27 +121,30 @@ export default function AdminPanel() {
       },
     });
   } else {
-    api.delete(`/api/products/${id}`).then(fetchProducts);
+    api.delete(`/api/products/${id}`).then(fetchProducts).catch(console.error);
   }
 };
 
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex flex-col items-center px-4 pt-2"
       style={{
-        background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
+        background: "linear-gradient(135deg, #FFF5E4 0%, #FF6F61 100%)",
+        fontFamily: "Karla, sans-serif",
       }}
     >
       <Navbar />
+      <div className="h-16" />
 
       <div
         ref={containerRef}
-        className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl p-8"
+        className="w-full max-w-5xl bg-[#FFF5E4] rounded-3xl shadow-2xl p-8"
       >
         <h1
           ref={headingRef}
-          className="text-4xl font-extrabold mb-8 text-blue-700 text-center drop-shadow"
+          className="text-4xl font-extrabold mb-6 text-[#FF6F61] text-center"
+          style={{ fontFamily: "Poppins, sans-serif" }}
         >
           Admin – Termékek kezelése
         </h1>
@@ -174,7 +161,7 @@ export default function AdminPanel() {
               ref={(el) => {
                 formFieldsRef.current[0] = el;
               }}
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-lg"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
             />
 
             <input
@@ -191,7 +178,7 @@ export default function AdminPanel() {
               ref={(el) => {
                 formFieldsRef.current[1] = el;
               }}
-              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-lg"
+              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
             />
 
             <input
@@ -208,42 +195,45 @@ export default function AdminPanel() {
               ref={(el) => {
                 formFieldsRef.current[2] = el;
               }}
-              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-lg"
+              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
             />
           </div>
 
           <button
             ref={submitButtonRef}
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-xl hover:rounded-md font-semibold text-lg hover:bg-blue-700 transition-all duration-300"
+            className="w-full bg-[#FF6F61] hover:bg-[#F1C40F] text-white py-3 rounded-full font-bold uppercase tracking-wide transition"
+            style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            {editingId ? "Módosít" : "Hozzáad"}
+            {editingId ? "Módosítás" : "Új termék hozzáadása"}
           </button>
         </form>
 
         <div className="grid gap-4">
-          {products.map((p, index) => (
+          {products.map((p, idx) => (
             <div
               key={p.id}
               ref={(el) => {
-                productRefs.current[index] = el;
+                productRefs.current[idx] = el;
               }}
-              className="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow transition hover:shadow-md"
+              className="flex justify-between items-center bg-white p-4 rounded-2xl shadow hover:shadow-md transition"
             >
-              <span className="text-lg font-medium text-gray-800">
-                {p.name} – <span className="text-blue-700">{p.price} Ft</span> –{" "}
-                <span className="text-green-600">{p.stock} db</span>
+              <span className="text-gray-800 font-medium">
+                {p.name} – <span className="text-[#FF6F61]">{p.price} Ft</span> –{" "}
+                <span className="text-[#88B04B]">{p.stock} db</span>
               </span>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(p)}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-xl hover:rounded-md hover:bg-yellow-600 transition-all duration-300"
+                  className="bg-[#F1C40F] hover:bg-[#FF6F61] text-white px-4 py-2 rounded-full uppercase tracking-wide font-bold transition"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Módosít
                 </button>
                 <button
                   onClick={() => handleDelete(p.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-xl hover:rounded-md hover:bg-red-700 transition-all duration-300"
+                  className="bg-[#FF6F61] hover:bg-[#D35400] text-white px-4 py-2 rounded-full uppercase tracking-wide font-bold transition"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Törlés
                 </button>

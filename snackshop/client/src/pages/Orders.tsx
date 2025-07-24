@@ -53,46 +53,48 @@ export default function Orders() {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center px-4"
+      className="min-h-screen flex flex-col items-center px-4 pt-2"
       style={{
-        background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
+        background: "linear-gradient(135deg, #FFF5E4 0%, #FF6F61 100%)",
+        fontFamily: "Karla, sans-serif",
       }}
     >
       <Navbar />
-
-      {}
-      <div className="h-12 md:h-12" />
+      <div className="h-16" />
 
       <div
         ref={containerRef}
-        className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-8"
+        className="w-full max-w-4xl bg-[#FFF5E4] rounded-3xl shadow-2xl p-8"
       >
-        <h1 className="text-3xl font-bold mb-8 text-blue-700 text-center drop-shadow">
+        <h1
+          className="text-4xl font-extrabold mb-6 text-[#FF6F61] text-center"
+          style={{ fontFamily: "Poppins, sans-serif" }}
+        >
           Rendelések
         </h1>
 
-        <div className="space-y-4">
-          {orders.map((order, index) => (
+        <div className="flex flex-col space-y-4">
+          {orders.map((order, idx) => (
             <div
               key={order.id}
-              ref={(el) => {
-                orderRefs.current[index] = el;
-              }}
-              className="bg-gray-100 p-4 rounded-lg shadow-sm border border-gray-200"
+              ref={(el) => { orderRefs.current[idx] = el; }}
+              className="bg-white p-6 rounded-2xl shadow-md border border-gray-200"
             >
-              <p className="text-lg text-gray-800 font-medium">
-                <span className="text-blue-700">{order.username}</span> –{" "}
+              <p className="text-lg text-[#333333] font-medium">
+                <span className="text-[#FF6F61]">{order.username}</span> –{" "}
                 {order.total_price} Ft –{" "}
                 <span className="text-gray-500">
                   {new Date(order.created_at).toLocaleString()}
                 </span>
               </p>
-              <p className="text-sm text-gray-600 mt-2">{order.items}</p>
+              <p className="mt-2 text-sm text-[#555555]">
+                {order.items}
+              </p>
             </div>
           ))}
 
           {orders.length === 0 && (
-            <p className="text-center text-gray-500">
+            <p className="text-center text-gray-500 text-lg">
               Nincsenek rendelési adatok.
             </p>
           )}
