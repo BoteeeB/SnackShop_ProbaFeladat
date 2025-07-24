@@ -12,30 +12,35 @@ export default function Cart({ onOrderComplete }: CartProps) {
   const [message, setMessage] = useState("");
   const messageRef = useRef<HTMLParagraphElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const clearBtnRef = useRef<HTMLButtonElement>(null);
 
-  const handleOrder = async () => {
-    try {
-      const res = await api.post("/api/order", { cart });
-      clearCart();
-      setMessage(`Sikeres rendelés! Összeg: ${res.data.total} Ft`);
-      if (onOrderComplete) onOrderComplete();
-    } catch (err) {
-      setMessage("Rendelés sikertelen.");
+  // track previous length to detect adds
+  const prevLength = useRef(cart.length);
+
+  // 1) Slide-in when a new item is added
+  useEffect(() => {
+    const newLen = cart.length;
+    if (newLen > prevLength.current && containerRef.current) {
+      const ul = containerRef.current.querySelector("ul");
+      const lastLi = ul?.lastElementChild as HTMLElement;
+      if (lastLi) {
+        gsap.from(lastLi, {
+          opacity: 0,
+          y: 20,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      }
     }
-  };
+    prevLength.current = newLen;
+  }, [cart]);
 
+  // 2) Order feedback animation
   useEffect(() => {
     if (!message) return;
-    const el = messageRef.current;
-    if (!el) return;
-
+    const el = messageRef.current!;
     gsap.set(el, { opacity: 0, y: 10 });
-    gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      ease: "power2.out",
-    });
+    gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
 
     const timer = setTimeout(() => {
       gsap.to(el, {
@@ -53,18 +58,78 @@ export default function Cart({ onOrderComplete }: CartProps) {
     };
   }, [message]);
 
+  // 3) Fade-in of the whole cart container on mount
   useEffect(() => {
-    if (!containerRef.current) return;
-    gsap.set(containerRef.current, { opacity: 0, y: -30 });
-    requestAnimationFrame(() => {
-      gsap.to(containerRef.current, {
+    const el = containerRef.current;
+    if (!el) return;
+    gsap.set(el, { opacity: 0, y: -30 });
+    requestAnimationFrame(() =>
+      gsap.to(el, {
         opacity: 1,
         y: 0,
         duration: 0.8,
         ease: "power2.out",
-      });
-    });
+      })
+    );
   }, []);
+
+  const handleOrder = async () => {
+    try {
+      const res = await api.post("/api/order", { cart });
+      clearCart();
+      setMessage(`Sikeres rendelés! Összeg: ${res.data.total} Ft`);
+      onOrderComplete?.();
+    } catch {
+      setMessage("Rendelés sikertelen.");
+    }
+  };
+
+  // 4) Slide-out + remove single item
+  const handleRemove = (id: string, e: React.MouseEvent) => {
+    const li = (e.currentTarget as HTMLElement).closest("li") as HTMLElement;
+    gsap.to(li, {
+      opacity: 0,
+      x: 50,
+      duration: 0.3,
+      ease: "power1.in",
+      onComplete: () => removeFromCart(id),
+    });
+  };
+
+  // 5) Staggered slide-out of all items + button “pop” on clear
+  const handleClearAll = () => {
+    // animate clear button
+    const btn = clearBtnRef.current;
+    if (btn) {
+      gsap.fromTo(
+        btn,
+        { scale: 1 },
+        {
+          scale: 0.9,
+          duration: 0.1,
+          ease: "power1.inOut",
+          yoyo: true,
+          repeat: 1,
+        }
+      );
+    }
+
+    // animate items out
+    const items = containerRef.current?.querySelectorAll("li") ?? [];
+    if (items.length === 0) {
+      clearCart();
+      return;
+    }
+
+    const tl = gsap.timeline({ onComplete: clearCart });
+    tl.to(items, {
+      opacity: 0,
+      x: 50,
+      duration: 0.3,
+      stagger: 0.05,
+      ease: "power1.in",
+    });
+  };
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -105,14 +170,20 @@ export default function Cart({ onOrderComplete }: CartProps) {
                     min="1"
                     max={item.stock}
                     value={item.quantity}
-                    onChange={(e) =>
-                      updateQuantity(item.id, parseInt(e.target.value))
-                    }
+                    onChange={(e) => {
+                      const t = e.target as HTMLInputElement;
+                      gsap.fromTo(
+                        t,
+                        { scale: 0.9 },
+                        { scale: 1, duration: 0.2, ease: "power1.out" }
+                      );
+                      updateQuantity(item.id, parseInt(t.value, 10));
+                    }}
                     className="w-16 ml-2 border border-gray-300 rounded px-2 py-1 text-black bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                   />
                 </div>
                 <button
-                  onClick={() => removeFromCart(item.id)}
+                  onClick={(e) => handleRemove(item.id, e)}
                   className="bg-red-600 text-white px-3 py-2 rounded-xl hover:bg-red-700 hover:rounded-md transition-all duration-300 text-sm font-semibold"
                 >
                   Törlés
@@ -134,7 +205,8 @@ export default function Cart({ onOrderComplete }: CartProps) {
               Rendelés leadása
             </button>
             <button
-              onClick={clearCart}
+              ref={clearBtnRef}
+              onClick={handleClearAll}
               className="bg-gray-200 text-gray-800 px-5 py-3 rounded-xl font-semibold text-md hover:bg-gray-300 hover:rounded-md transition-all duration-300"
             >
               Kosár ürítése
