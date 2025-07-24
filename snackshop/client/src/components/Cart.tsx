@@ -34,8 +34,8 @@ export default function Cart({ onOrderComplete }: CartProps) {
   }, [cart]);
 
   useEffect(() => {
-    if (!message) return;
-    const el = messageRef.current!;
+    if (!message || !messageRef.current) return;
+    const el = messageRef.current;
     gsap.set(el, { opacity: 0, y: 10 });
     gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
 
@@ -127,10 +127,14 @@ export default function Cart({ onOrderComplete }: CartProps) {
 
   return (
     <div
-      ref={containerRef}
-      className="mt-10 backdrop-blur-md bg-white/90 p-8 rounded-3xl shadow-2xl max-w-2xl mx-auto border border-gray-200 transition-all"
+    ref={containerRef}
+    className="p-8 bg-[#FFF5E4] rounded-3xl shadow-2xl max-w-2xl"
+    style={{ fontFamily: "Karla, sans-serif" }}
     >
-      <h2 className="text-3xl font-extrabold mb-6 text-blue-700 text-center drop-shadow">
+      <h2
+        className="text-3xl font-extrabold mb-6 text-[#FF6F61] text-center"
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
         Kosár
       </h2>
 
@@ -138,7 +142,9 @@ export default function Cart({ onOrderComplete }: CartProps) {
         <p
           ref={messageRef}
           className={`mb-6 text-center font-semibold ${
-            message.startsWith("Sikeres") ? "text-green-600" : "text-red-600"
+            message.startsWith("Sikeres")
+              ? "text-[#88B04B]"
+              : "text-[#FF6F61]"
           }`}
         >
           {message}
@@ -146,17 +152,19 @@ export default function Cart({ onOrderComplete }: CartProps) {
       )}
 
       {cart.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg">A kosár üres.</p>
+        <p className="text-center text-gray-500 text-lg">
+          A kosár üres.
+        </p>
       ) : (
         <>
           <ul className="space-y-6">
             {cart.map((item) => (
               <li
                 key={item.id}
-                className="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-gray-200"
+                className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-md"
               >
                 <div className="text-gray-800 font-medium text-lg">
-                  {item.name} – {item.price} Ft x
+                  {item.name} – {item.price} Ft x{" "}
                   <input
                     type="number"
                     min="1"
@@ -171,12 +179,12 @@ export default function Cart({ onOrderComplete }: CartProps) {
                       );
                       updateQuantity(item.id, parseInt(t.value, 10));
                     }}
-                    className="w-16 ml-2 border border-gray-300 rounded px-2 py-1 text-black bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    className="w-16 ml-2 border border-gray-300 rounded-lg px-2 py-1 text-black bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition"
                   />
                 </div>
                 <button
                   onClick={(e) => handleRemove(item.id, e)}
-                  className="bg-red-600 text-white px-3 py-2 rounded-xl hover:bg-red-700 hover:rounded-md transition-all duration-300 text-sm font-semibold"
+                  className="bg-[#FF6F61] text-white px-3 py-2 rounded-full uppercase text-sm font-semibold tracking-wide hover:bg-[#F1C40F] transition"
                 >
                   Törlés
                 </button>
@@ -192,14 +200,16 @@ export default function Cart({ onOrderComplete }: CartProps) {
             <button
               onClick={handleOrder}
               disabled={cart.length === 0}
-              className="bg-green-600 text-white px-5 py-3 rounded-xl font-semibold text-md hover:bg-green-700 hover:rounded-md transition-all duration-300 disabled:opacity-50"
+              className="bg-[#FF6F61] text-white px-5 py-3 rounded-full font-bold uppercase tracking-wide transition hover:bg-[#F1C40F] disabled:opacity-50"
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Rendelés leadása
             </button>
             <button
               ref={clearBtnRef}
               onClick={handleClearAll}
-              className="bg-gray-200 text-gray-800 px-5 py-3 rounded-xl font-semibold text-md hover:bg-gray-300 hover:rounded-md transition-all duration-300"
+              className="bg-[#F1C40F] text-white px-5 py-3 rounded-full font-bold uppercase tracking-wide transition hover:bg-[#88B04B]"
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Kosár ürítése
             </button>

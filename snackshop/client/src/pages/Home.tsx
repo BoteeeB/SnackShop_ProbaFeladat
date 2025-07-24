@@ -32,50 +32,44 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (products.length > 0) {
-      gsap.set(containerRef.current, { opacity: 0, y: -30 });
-      gsap.set(headingRef.current, { opacity: 0, y: -20 });
-      gsap.set(cardRefs.current, { opacity: 0, y: 20 });
+    if (!containerRef.current) return;
+    gsap.set(containerRef.current, { opacity: 0, y: -30 });
+    gsap.set(headingRef.current, { opacity: 0, y: -20 });
+    gsap.set(cardRefs.current, { opacity: 0, y: 20 });
 
-      requestAnimationFrame(() => {
-        gsap.to(containerRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power2.out",
-        });
-
-        gsap.to(headingRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 1.2,
-          ease: "back.out(1.7)",
-          delay: 0.3,
-        });
-
-        gsap.to(cardRefs.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "power2.out",
-          delay: 0.5,
-        });
+    requestAnimationFrame(() => {
+      gsap.to(containerRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
       });
-    }
+      gsap.to(headingRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "back.out(1.7)",
+        delay: 0.3,
+      });
+      gsap.to(cardRefs.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out",
+        delay: 0.5,
+      });
+    });
   }, [products]);
 
   useEffect(() => {
     if (!message || !messageRef.current) return;
-
     const el = messageRef.current;
-
     gsap.fromTo(
       el,
       { opacity: 0, y: -20 },
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
     );
-
     const timeout = setTimeout(() => {
       gsap.to(el, {
         opacity: 0,
@@ -84,15 +78,15 @@ export default function Home() {
         ease: "power2.in",
       });
     }, 3500);
-
     return () => clearTimeout(timeout);
   }, [message]);
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-start px-4 pt-20"
+      className="min-h-screen flex flex-col items-center px-4 pt-12"
       style={{
-        background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
+        background: "linear-gradient(135deg, #FFF5E4 0%, #FF6F61 100%)",
+        fontFamily: "Karla, sans-serif",
       }}
     >
       <Navbar />
@@ -100,53 +94,70 @@ export default function Home() {
       {message && (
         <div
           ref={messageRef}
-          className="mt-4 bg-green-100 text-green-700 px-4 py-2 rounded shadow"
+          className="mt-4 bg-[#DFF2E1] text-[#388E3C] px-4 py-2 rounded shadow"
         >
           {message}
         </div>
       )}
 
-      <div
-        ref={containerRef}
-        className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl p-8 mt-6"
-      >
-        <h1
-          ref={headingRef}
-          className="text-4xl font-extrabold mb-8 text-blue-700 text-center drop-shadow"
+      <div className="w-full max-w-6xl mt-6 flex flex-col md:flex-row items-start gap-8">
+        <div
+          ref={containerRef}
+          className="md:w-2/3 bg-[#FFF5E4] rounded-2xl shadow-2xl p-8 flex-shrink-0"
         >
-          Snackek
-        </h1>
+          <h1
+            ref={headingRef}
+            className="text-4xl font-extrabold mb-8 text-[#FF6F61] text-center"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            Snackek
+          </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((product, index) => (
-            <div
-              key={product.id}
-              ref={(el) => {
-                cardRefs.current[index] = el;
-              }}
-              className="border p-4 rounded-lg shadow bg-gray-100 flex flex-col items-start"
-            >
-              <h2 className="text-lg font-semibold text-black">{product.name}</h2>
-              <p className="text-sm text-black">Ár: {product.price} Ft</p>
-              <p className="text-sm text-black">Készlet: {product.stock}</p>
-              <button
-                onClick={() => addToCart({ ...product, quantity: 1 })}
-                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-xl hover:rounded-md hover:bg-blue-700 transition-all duration-300"
-                disabled={product.stock === 0}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product, i) => (
+              <div
+                key={product.id}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
+                className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transform hover:-translate-y-1 transition"
               >
-                Kosárba
-              </button>
-            </div>
-          ))}
+                <h2
+                  className="text-lg font-semibold text-[#333333] mb-2"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  {product.name}
+                </h2>
+                <p className="text-sm text-[#333333] mb-1">
+                  Ár: <span className="font-medium">{product.price} Ft</span>
+                </p>
+                <p className="text-sm text-[#333333] mb-4">
+                  Készlet: <span className="font-medium">{product.stock}</span>
+                </p>
+                <button
+                  onClick={() => {
+                    addToCart({ ...product, quantity: 1 });
+                    setMessage(`${product.name} hozzáadva a kosárhoz!`);
+                  }}
+                  disabled={product.stock === 0}
+                  className="w-full bg-[#FF6F61] hover:bg-[#F1C40F] text-white py-2 rounded-full font-bold uppercase tracking-wide transition"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Kosárba
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <Cart
-          onOrderComplete={() => {
-            fetchProducts();
-            setMessage("Sikeres rendelés!");
-            setTimeout(() => setMessage(""), 4000);
-          }}
-        />
+        <div className="md:w-1/3 self-start">
+          <Cart
+            onOrderComplete={() => {
+              fetchProducts();
+              setMessage("Sikeres rendelés!");
+            }}
+          />
+        </div>
       </div>
     </div>
   );

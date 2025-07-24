@@ -144,7 +144,7 @@ export default function Login() {
               onChange={handleChange}
               autoComplete="username"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
           </div>
 
@@ -167,7 +167,7 @@ export default function Login() {
               onChange={handleChange}
               autoComplete="current-password"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#88B04B] transition text-lg"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
             />
           </div>
 
