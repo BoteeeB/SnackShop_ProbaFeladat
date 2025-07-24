@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { gsap } from "gsap";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import FallingSnacks from "../components/FallingSnacks";
 import type { ChangeEvent, FormEvent } from "react";
 
 export default function Login() {
@@ -18,20 +19,21 @@ export default function Login() {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const timeout = requestAnimationFrame(() => {
+    const id = requestAnimationFrame(() => {
       if (
         !formContainerRef.current ||
         !headerRef.current ||
         !infoContainerRef.current ||
         !submitButtonRef.current
-      ) return;
+      )
+        return;
 
-      const formFields = formFieldRefs.current.filter(Boolean);
-      if (formFields.length === 0) return;
+      const fields = formFieldRefs.current.filter(Boolean);
+      if (!fields.length) return;
 
       gsap.set(formContainerRef.current, { opacity: 0, y: -50 });
       gsap.set(headerRef.current, { opacity: 0, y: -20 });
-      gsap.set(formFields, { opacity: 0, x: -50 });
+      gsap.set(fields, { opacity: 0, x: -50 });
       gsap.set(infoContainerRef.current, { opacity: 0, y: 30 });
       gsap.set(submitButtonRef.current, { opacity: 0, scale: 0.8 });
 
@@ -41,22 +43,19 @@ export default function Login() {
         duration: 1,
         ease: "power2.out",
       });
-
       gsap.to(headerRef.current, {
         opacity: 1,
         y: 0,
         duration: 1.5,
         ease: "power2.out",
       });
-
-      gsap.to(formFields, {
+      gsap.to(fields, {
         opacity: 1,
         x: 0,
         duration: 0.7,
         stagger: 0.1,
         ease: "power4.out",
       });
-
       gsap.to(infoContainerRef.current, {
         opacity: 1,
         y: 0,
@@ -64,7 +63,6 @@ export default function Login() {
         ease: "power2.out",
         delay: 0.5,
       });
-
       gsap.to(submitButtonRef.current, {
         opacity: 1,
         scale: 1,
@@ -73,11 +71,10 @@ export default function Login() {
       });
     });
 
-    return () => cancelAnimationFrame(timeout);
+    return () => cancelAnimationFrame(id);
   }, []);
 
   if (isLoading) return null;
-
   if (user) return <Navigate to={user.isAdmin ? "/admin" : "/home"} replace />;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -93,31 +90,27 @@ export default function Login() {
         email: string;
         isAdmin: boolean;
       }>("/api/login", form);
-
-      login({
-        id: res.data.id,
-        username: res.data.username,
-        email: res.data.email,
-        isAdmin: res.data.isAdmin,
-      });
-
+      login(res.data);
       navigate(res.data.isAdmin ? "/admin" : "/home", { replace: true });
-    } catch (err) {
-      console.error("Login error:", err);
+    } catch {
       setError("Hibás felhasználónév vagy jelszó.");
     }
   };
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center"
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden"
       style={{
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
+      {}
+      <FallingSnacks count={25} />
+
+      {}
       <div
         ref={formContainerRef}
-        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-12 flex flex-col items-center"
+        className="relative z-10 w-full max-w-lg bg-white rounded-2xl shadow-2xl p-12 flex flex-col items-center"
       >
         <h1
           ref={headerRef}

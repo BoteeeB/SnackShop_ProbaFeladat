@@ -3,6 +3,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import api from "../services/api";
+import FallingSnacks from "../components/FallingSnacks";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -30,14 +31,12 @@ export default function Register() {
         duration: 1,
         ease: "power2.out",
       });
-
       gsap.to(headerRef.current, {
         opacity: 1,
         y: 0,
         duration: 1.5,
         ease: "power2.out",
       });
-
       gsap.to(formFieldRefs.current, {
         opacity: 1,
         x: 0,
@@ -45,14 +44,12 @@ export default function Register() {
         stagger: 0.1,
         ease: "power4.out",
       });
-
       gsap.to(submitButtonRef.current, {
         opacity: 1,
         scale: 1,
         duration: 1,
         ease: "back.out(2)",
       });
-
       gsap.to(infoContainerRef.current, {
         opacity: 1,
         y: 0,
@@ -73,21 +70,23 @@ export default function Register() {
       await api.post("/api/register", form);
       setSuccess(true);
       setTimeout(() => navigate("/"), 1500);
-    } catch (err) {
+    } catch {
       setError("Felhasználónév már létezik.");
     }
   };
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{
         background: "linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)",
       }}
     >
+      <FallingSnacks count={60} />
+
       <div
         ref={formContainerRef}
-        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-12 flex flex-col items-center"
+        className="relative z-10 w-full max-w-lg bg-white rounded-2xl shadow-2xl p-12 flex flex-col items-center"
       >
         <h1
           ref={headerRef}
@@ -98,7 +97,11 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
           {error && <p className="text-red-500 text-center">{error}</p>}
-          {success && <p className="text-green-500 text-center">Sikeres regisztráció!</p>}
+          {success && (
+            <p className="text-green-500 text-center">
+              Sikeres regisztráció!
+            </p>
+          )}
 
           <div
             className="form-field"
@@ -106,7 +109,9 @@ export default function Register() {
               formFieldRefs.current[0] = el;
             }}
           >
-            <label className="block mb-2 font-medium text-gray-700">Felhasználónév</label>
+            <label className="block mb-2 font-medium text-gray-700">
+              Felhasználónév
+            </label>
             <input
               type="text"
               name="username"
@@ -124,7 +129,9 @@ export default function Register() {
               formFieldRefs.current[1] = el;
             }}
           >
-            <label className="block mb-2 font-medium text-gray-700">Jelszó</label>
+            <label className="block mb-2 font-medium text-gray-700">
+              Jelszó
+            </label>
             <input
               type="password"
               name="password"
@@ -150,7 +157,10 @@ export default function Register() {
           ref={infoContainerRef}
         >
           Már van fiókod?{" "}
-          <a href="/" className="text-blue-600 underline hover:text-blue-800">
+          <a
+            href="/"
+            className="text-blue-600 underline hover:text-blue-800"
+          >
             Bejelentkezés
           </a>
         </p>

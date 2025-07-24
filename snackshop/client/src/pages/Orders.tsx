@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import api from "../services/api";
 import { gsap } from "gsap";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
 
 interface Order {
   id: string;
@@ -17,7 +16,6 @@ export default function Orders() {
   const orderRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const backButtonRef = useRef<HTMLButtonElement>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     api.get<Order[]>("/api/orders").then((res) => {

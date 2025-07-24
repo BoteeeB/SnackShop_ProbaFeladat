@@ -14,10 +14,8 @@ export default function Cart({ onOrderComplete }: CartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const clearBtnRef = useRef<HTMLButtonElement>(null);
 
-  // track previous length to detect adds
   const prevLength = useRef(cart.length);
 
-  // 1) Slide-in when a new item is added
   useEffect(() => {
     const newLen = cart.length;
     if (newLen > prevLength.current && containerRef.current) {
@@ -35,7 +33,6 @@ export default function Cart({ onOrderComplete }: CartProps) {
     prevLength.current = newLen;
   }, [cart]);
 
-  // 2) Order feedback animation
   useEffect(() => {
     if (!message) return;
     const el = messageRef.current!;
@@ -58,7 +55,6 @@ export default function Cart({ onOrderComplete }: CartProps) {
     };
   }, [message]);
 
-  // 3) Fade-in of the whole cart container on mount
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -84,7 +80,6 @@ export default function Cart({ onOrderComplete }: CartProps) {
     }
   };
 
-  // 4) Slide-out + remove single item
   const handleRemove = (id: string, e: React.MouseEvent) => {
     const li = (e.currentTarget as HTMLElement).closest("li") as HTMLElement;
     gsap.to(li, {
@@ -96,9 +91,7 @@ export default function Cart({ onOrderComplete }: CartProps) {
     });
   };
 
-  // 5) Staggered slide-out of all items + button “pop” on clear
   const handleClearAll = () => {
-    // animate clear button
     const btn = clearBtnRef.current;
     if (btn) {
       gsap.fromTo(
@@ -114,7 +107,6 @@ export default function Cart({ onOrderComplete }: CartProps) {
       );
     }
 
-    // animate items out
     const items = containerRef.current?.querySelectorAll("li") ?? [];
     if (items.length === 0) {
       clearCart();

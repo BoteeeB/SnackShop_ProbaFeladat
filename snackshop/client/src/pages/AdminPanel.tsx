@@ -3,7 +3,6 @@ import type { ChangeEvent, FormEvent } from "react";
 import api from "../services/api";
 import { gsap } from "gsap";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -23,7 +22,6 @@ export default function AdminPanel() {
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  const navigate = useNavigate();
 
   const fetchProducts = () =>
     api.get<Product[]>("/api/products").then((res) => setProducts(res.data));
