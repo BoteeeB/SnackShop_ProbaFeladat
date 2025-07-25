@@ -92,25 +92,27 @@ export default function Home() {
       <Navbar />
 
       {message && (
-        <div
-          ref={messageRef}
-          className="mt-4 px-4 py-2 rounded shadow"
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 800,
-            textShadow: "0 1px 2px rgba(0,0,0,0.1)",
-            backgroundColor: message.startsWith("Sikeres") ? "#DFF2E1" : "#DFF2E1",
-            color: message.startsWith("Sikeres") ? "#388E3C" : "#388E3C",
-          }}
-        >
-          {message}
-        </div>
-      )}
+  <div
+  ref={messageRef}
+  className="fixed left-1/2 transform -translate-x-1/2 px-4 py-2 rounded shadow z-50"
+  style={{
+    top: "5.3rem",
+    fontFamily: "Poppins, sans-serif",
+    fontWeight: 800,
+    textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+    backgroundColor: "#DFF2E1",
+    color: "#388E3C",
+  }}
+>
+  {message}
+</div>
+)}
 
-      <div className="w-full max-w-6xl mt-6 flex flex-col md:flex-row items-start gap-8">
+
+      <div className="w-full max-w-6xl mt-6 grid gap-8 lg:grid-cols-3">
         <div
           ref={containerRef}
-          className="md:w-2/3 bg-[#FFF5E4] rounded-2xl shadow-2xl p-8 flex-shrink-0"
+          className="lg:col-span-2 bg-[#FFF5E4] rounded-2xl shadow-2xl p-8"
         >
           <h1
             ref={headingRef}
@@ -120,7 +122,7 @@ export default function Home() {
             Snackek
           </h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
             {products.map((product, i) => (
               <div
                 key={product.id}
@@ -196,7 +198,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="md:w-1/3 self-start">
+        <div className="md:w-full lg:w-auto self-start sticky top-20">
           <Cart
             onOrderComplete={() => {
               fetchProducts();

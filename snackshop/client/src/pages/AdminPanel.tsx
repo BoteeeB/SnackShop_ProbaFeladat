@@ -25,7 +25,6 @@ export default function AdminPanel() {
   const formFieldsRef = useRef<(HTMLInputElement | null)[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
-
   const prevCount = useRef(products.length);
 
   const fetchProducts = () =>
@@ -38,8 +37,7 @@ export default function AdminPanel() {
   useEffect(() => {
     const fields = formFieldsRef.current.filter(Boolean);
     const cards = productRefs.current.filter(Boolean);
-    if (!containerRef.current || !headingRef.current || !submitButtonRef.current)
-      return;
+    if (!containerRef.current || !headingRef.current || !submitButtonRef.current) return;
 
     const tl = gsap.timeline();
     gsap.set(containerRef.current, { opacity: 0, y: -40 });
@@ -104,27 +102,23 @@ export default function AdminPanel() {
   };
 
   const handleDelete = (id: string) => {
-  const idx = products.findIndex((p) => p.id === id);
-  const el = productRefs.current[idx];
+    const idx = products.findIndex((p) => p.id === id);
+    const el = productRefs.current[idx];
 
-  if (el) {
-    gsap.to(el, {
-      opacity: 0,
-      x: 50,
-      duration: 0.3,
-      ease: "power1.in",
-      onComplete: () => {
-        api
-          .delete(`/api/products/${id}`)
-          .then(() => fetchProducts())
-          .catch((err) => console.error(err));
-      },
-    });
-  } else {
-    api.delete(`/api/products/${id}`).then(fetchProducts).catch(console.error);
-  }
-};
-
+    if (el) {
+      gsap.to(el, {
+        opacity: 0,
+        x: 50,
+        duration: 0.3,
+        ease: "power1.in",
+        onComplete: () => {
+          api.delete(`/api/products/${id}`).then(fetchProducts).catch(console.error);
+        },
+      });
+    } else {
+      api.delete(`/api/products/${id}`).then(fetchProducts).catch(console.error);
+    }
+  };
 
   return (
     <div
@@ -150,53 +144,69 @@ export default function AdminPanel() {
         </h1>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 mb-8">
-          <div className="flex flex-wrap gap-4 font-extrabold">
-            <input
-              type="text"
-              placeholder="Név"
-              value={form.name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setForm({ ...form, name: e.target.value })
-              }
-              ref={(el) => {
-                formFieldsRef.current[0] = el;
-              }}
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-extrabold">
+            <div className="flex flex-col">
+              <label htmlFor="name" className="mb-1 text-[#333] text-sm">
+                Terméknév
+              </label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Pl. Chips"
+                value={form.name}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setForm({ ...form, name: e.target.value })
+                }
+                ref={(el) => {
+                  formFieldsRef.current[0] = el;
+                }}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              />
+            </div>
 
-            <input
-              type="number"
-              min={1}
-              placeholder="Ár"
-              value={form.price}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setForm({
-                  ...form,
-                  price: Math.max(1, parseInt(e.target.value) || 1),
-                })
-              }
-              ref={(el) => {
-                formFieldsRef.current[1] = el;
-              }}
-              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
-            />
+            <div className="flex flex-col">
+              <label htmlFor="price" className="mb-1 text-[#333] text-sm">
+                Ár (Ft)
+              </label>
+              <input
+                id="price"
+                type="number"
+                min={1}
+                value={form.price}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setForm({
+                    ...form,
+                    price: Math.max(1, parseInt(e.target.value) || 1),
+                  })
+                }
+                ref={(el) => {
+                  formFieldsRef.current[1] = el;
+                }}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              />
+            </div>
 
-            <input
-              type="number"
-              min={1}
-              placeholder="Készlet"
-              value={form.stock}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setForm({
-                  ...form,
-                  stock: Math.max(1, parseInt(e.target.value) || 1),
-                })
-              }
-              ref={(el) => {
-                formFieldsRef.current[2] = el;
-              }}
-              className="w-32 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
-            />
+            <div className="flex flex-col">
+              <label htmlFor="stock" className="mb-1 text-[#333] text-sm">
+                Készlet (db)
+              </label>
+              <input
+                id="stock"
+                type="number"
+                min={1}
+                value={form.stock}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setForm({
+                    ...form,
+                    stock: Math.max(1, parseInt(e.target.value) || 1),
+                  })
+                }
+                ref={(el) => {
+                  formFieldsRef.current[2] = el;
+                }}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF6F61] transition text-lg"
+              />
+            </div>
           </div>
 
           <button
@@ -216,13 +226,13 @@ export default function AdminPanel() {
               ref={(el) => {
                 productRefs.current[idx] = el;
               }}
-              className="flex justify-between items-center bg-white p-4 rounded-2xl shadow hover:shadow-md transition"
+              className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-white p-4 rounded-2xl shadow hover:shadow-md transition"
             >
-              <span className="text-gray-800 font-extrabold">
+              <span className="text-gray-800 font-extrabold text-center sm:text-left">
                 {p.name} – <span className="text-[#FF6F61]">{p.price} Ft</span> –{" "}
                 <span className="text-[#88B04B]">{p.stock} db</span>
               </span>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 self-center sm:self-auto">
                 <button
                   onClick={() => handleEdit(p)}
                   className="bg-[#F1C40F] hover:bg-[#FF6F61] text-white px-4 py-2 rounded-full uppercase tracking-wide font-bold transition"

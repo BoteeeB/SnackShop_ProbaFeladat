@@ -142,10 +142,10 @@ export default function Cart({ onOrderComplete }: CartProps) {
 
   return (
     <div
-      ref={containerRef}
-      className="p-8 bg-[#FFF5E4] rounded-3xl shadow-2xl max-w-2xl"
-      style={{ fontFamily: "Karla, sans-serif" }}
-    >
+    ref={containerRef}
+    className="p-8 bg-[#FFF5E4] rounded-3xl shadow-2xl max-w-full lg:max-w-2xl"
+    style={{ fontFamily: "Karla, sans-serif" }}
+  >
       <h2
         className="text-3xl font-extrabold mb-6 text-[#FF6F61] text-center"
         style={{
