@@ -27,9 +27,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+
+    try {
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser && typeof parsedUser === "object") {
+          setUser(parsedUser);
+        }
+      }
+    } catch (error) {
+      console.warn("Hibás user-adatok a localStorage-ben. Törlés...");
+      localStorage.removeItem("user");
     }
+
     setIsLoading(false);
   }, []);
 
