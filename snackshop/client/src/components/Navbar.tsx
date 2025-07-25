@@ -58,7 +58,7 @@ export default function Navbar() {
                     <Link
                       to="/orders"
                       onClick={() => setMenuOpen(false)}
-                      className="block lg:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
+                      className="block lg:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white hover:text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       Rendelések
@@ -67,7 +67,7 @@ export default function Navbar() {
                     <Link
                       to="/admin"
                       onClick={() => setMenuOpen(false)}
-                      className="block lg:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
+                      className="block lg:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white hover:text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       Admin kezdőlap
@@ -76,7 +76,7 @@ export default function Navbar() {
                     <Link
                       to="/users"
                       onClick={() => setMenuOpen(false)}
-                      className="block lg:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
+                      className="block lg:inline-block bg-[#FF6F61] hover:bg-[#F1C40F] text-white hover:text-white uppercase tracking-wide px-4 py-2 rounded-full font-bold transition"
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       Felhasználók
