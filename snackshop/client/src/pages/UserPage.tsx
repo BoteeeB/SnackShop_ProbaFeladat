@@ -17,6 +17,7 @@ export default function UsersPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const popupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [deleteMessage, setDeleteMessage] = useState<string | null>(null);
+  const deleteMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     api.get("/api/users").then((res) => {
@@ -44,39 +45,38 @@ export default function UsersPage() {
   }, [users.length]);
 
   const handleCogClick = (userId: string) => {
-  const isSame = openPopupId === userId;
+    const isSame = openPopupId === userId;
 
-  if (isSame) {
-    const popup = popupRefs.current[userId];
-    if (popup) {
-      gsap.to(popup, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.2,
-        ease: "power1.in",
-        onComplete: () => setOpenPopupId(null),
-      });
-    } else {
-      setOpenPopupId(null);
-    }
-  } else if (openPopupId) {
-    const currentPopup = popupRefs.current[openPopupId];
-    if (currentPopup) {
-      gsap.to(currentPopup, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.2,
-        ease: "power1.in",
-        onComplete: () => setOpenPopupId(userId),
-      });
+    if (isSame) {
+      const popup = popupRefs.current[userId];
+      if (popup) {
+        gsap.to(popup, {
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.2,
+          ease: "power1.in",
+          onComplete: () => setOpenPopupId(null),
+        });
+      } else {
+        setOpenPopupId(null);
+      }
+    } else if (openPopupId) {
+      const currentPopup = popupRefs.current[openPopupId];
+      if (currentPopup) {
+        gsap.to(currentPopup, {
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.2,
+          ease: "power1.in",
+          onComplete: () => setOpenPopupId(userId),
+        });
+      } else {
+        setOpenPopupId(userId);
+      }
     } else {
       setOpenPopupId(userId);
     }
-  } else {
-    setOpenPopupId(userId);
-  }
-};
-
+  };
 
   useEffect(() => {
     if (openPopupId) {
@@ -111,30 +111,48 @@ export default function UsersPage() {
   }, [openPopupId]);
 
   const handleDelete = async (userId: string) => {
-  const confirmDelete = window.confirm("Biztosan törölni szeretnéd a fiókot?");
-  if (!confirmDelete) return;
+    const confirmDelete = window.confirm("Biztosan törölni szeretnéd a fiókot?");
+    if (!confirmDelete) return;
 
-  const userToDelete = users.find((u) => u.id === userId);
+    const userToDelete = users.find((u) => u.id === userId);
 
-  try {
-    await api.delete(`/api/users/${userId}`);
-    setUsers((prev) => prev.filter((user) => user.id !== userId));
-    setOpenPopupId(null);
+    try {
+      await api.delete(`/api/users/${userId}`);
+      setUsers((prev) => prev.filter((user) => user.id !== userId));
+      setOpenPopupId(null);
 
-    if (userToDelete) {
-      setDeleteMessage(`A(z) "${userToDelete.username}" nevű fiók törlésre került.`);
+      if (userToDelete) {
+        setDeleteMessage(`A(z) "${userToDelete.username}" nevű fiók törlésre került.`);
+      }
+
+      setTimeout(() => {
+        if (deleteMessageRef.current) {
+          gsap.to(deleteMessageRef.current, {
+            opacity: 0,
+            y: -10,
+            duration: 0.5,
+            ease: "power2.in",
+            onComplete: () => setDeleteMessage(null),
+          });
+        } else {
+          setDeleteMessage(null);
+        }
+      }, 6000);
+    } catch (err) {
+      console.error("Törlési hiba:", err);
+      alert("Hiba történt a törlés során.");
     }
+  };
 
-    setTimeout(() => {
-      setDeleteMessage(null);
-    }, 6000);
-  } catch (err) {
-    console.error("Törlési hiba:", err);
-    alert("Hiba történt a törlés során.");
-  }
-};
-
-
+  useEffect(() => {
+    if (deleteMessage && deleteMessageRef.current) {
+      gsap.fromTo(
+        deleteMessageRef.current,
+        { opacity: 0, y: -10 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+      );
+    }
+  }, [deleteMessage]);
 
   return (
     <div
@@ -157,10 +175,17 @@ export default function UsersPage() {
         >
           Felhasználók
         </h1>
+
         {deleteMessage && (
-        <div className="mb-6 text-center text-green-800 bg-green-100 border border-green-300 px-4 py-3 rounded-xl shadow-sm transition duration-300">
+          <div
+            ref={deleteMessageRef}
+            className="mb-6 text-center text-green-800 bg-green-100 border border-green-300 px-4 py-3 rounded-xl shadow-md"
+            style={{
+              fontFamily: "Karla, sans-serif",
+            }}
+          >
             {deleteMessage}
-        </div>
+          </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -196,9 +221,6 @@ export default function UsersPage() {
                   <button
                     onClick={() => handleDelete(user.id)}
                     className="w-full px-3 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-200"
-                    style={{
-                      fontFamily: "Karla, sans-serif",
-                    }}
                   >
                     Fiók törlése
                   </button>
