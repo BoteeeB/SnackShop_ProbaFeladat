@@ -29,7 +29,7 @@ npm run dev
 - Regisztráció, bejelentkezés, session alapú védelem
 - Snack listázás, kosárkezelés, rendelés
 - Admin termék CRUD és rendeléslista
-- Felhasználók megtekintése
+- Felhasználók megtekintése és törlése
 
 ## 📁 Mappa szerkezet
 
